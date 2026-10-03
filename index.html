@@ -10,14 +10,29 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/styles.css">
-<noscript><style>.reveal{opacity:1 !important;transform:none !important}</style></noscript>
+<noscript><style>.reveal{opacity:1 !important;transform:none !important}#splash{display:none !important}</style></noscript>
 </head>
 <body>
 
+<!-- ============ SPLASH / PRELOADER ============ -->
+<div id="splash" class="splash" role="status" aria-live="polite" aria-label="Loading Bison Concrete">
+  <div class="splash__tape splash__tape--top" aria-hidden="true"></div>
+  <div class="splash__inner">
+    <div class="splash__drum" aria-hidden="true"></div>
+    <img class="splash__wordmark" src="assets/img/logo-light.svg" alt="Bison Concrete Ltd">
+    <div class="splash__progress" aria-hidden="true"><span class="splash__progress-fill"></span></div>
+    <p class="splash__label">Batching your mix<span class="splash__dots"></span></p>
+  </div>
+  <div class="splash__tape splash__tape--bottom" aria-hidden="true"></div>
+</div>
+
 <!-- ============ HEADER ============ -->
-<header class="site-header">
+<header class="site-header site-header--overlay">
   <div class="wrap nav">
-    <a href="index.html" aria-label="Bison Concrete home"><img class="nav__logo" src="assets/img/logo.svg" alt="Bison Concrete Ltd"></a>
+    <a href="index.html" aria-label="Bison Concrete home">
+      <img class="nav__logo nav__logo--dark" src="assets/img/logo.svg" alt="Bison Concrete Ltd">
+      <img class="nav__logo nav__logo--light" src="assets/img/logo-light.svg" alt="Bison Concrete Ltd" aria-hidden="true">
+    </a>
     <nav class="nav__links" aria-label="Primary">
       <a href="index.html" class="active">Home</a>
       <a href="about.html">About</a>
@@ -37,20 +52,33 @@
 </header>
 
 <!-- ============ HERO ============ -->
-<section class="hero">
-  <img class="hero__watermark" src="assets/img/bison-mixer-truck-cut.png" alt="" aria-hidden="true" fetchpriority="high">
+<section class="hero hero--video">
+  <!-- Full-bleed background video (muted, looping). Poster shows while it loads. -->
+  <video class="hero__video" autoplay muted loop playsinline preload="auto"
+         poster="assets/img/bison-mixer-truck-cut.png" aria-hidden="true">
+    <source src="assets/video/bison-bg.mp4" type="video/mp4">
+  </video>
+  <div class="hero__overlay" aria-hidden="true"></div>
   <div class="wrap hero__grid">
     <div class="hero__copy reveal">
-      <h1>Ready-mix concrete,<br>built to <em>spec</em> and<br>delivered on time.</h1>
-      <p class="hero__sub">Consistent, specification-based concrete for contractors, developers and infrastructure projects across Tema, Accra and surrounding areas.</p>
+      <h1>Concrete built to <em>spec</em>,<br>delivered on your schedule.</h1>
+      <p class="hero__sub">Consistent, specification-based ready-mix for contractors, developers and infrastructure projects — batched to your approved grade and dispatched to a delivery plan you can pour around.</p>
       <div class="btn-row hero__cta">
         <a class="btn btn--primary" href="quote.html">Request a Quote
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
-        <a class="btn btn--ghost" href="services.html">View Services &amp; Grades</a>
+        <a class="btn btn--glass" href="services.html">View Services &amp; Grades</a>
+      </div>
+      <div class="hero__stats">
+        <div class="hero__stat"><div class="n">Spec<em>-based</em></div><div class="l">Batched to your approved mix design</div></div>
+        <div class="hero__stat"><div class="n">On<em>-time</em></div><div class="l">Transit mixers dispatched to a delivery plan</div></div>
+        <div class="hero__stat"><div class="n">GS <em>1317</em></div><div class="l">Aligned to the Ghana ready-mix standard</div></div>
       </div>
     </div>
   </div>
+  <a class="hero__scroll" href="#why" aria-label="Scroll to content">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+  </a>
 </section>
 
 <!-- ============ TRUST STRIP ============ -->
@@ -66,7 +94,7 @@
 </div>
 
 <!-- ============ VALUE PROPS ============ -->
-<section class="section">
+<section class="section" id="why">
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Why Bison Concrete</span>

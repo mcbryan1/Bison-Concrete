@@ -4,26 +4,85 @@
 (function () {
   "use strict";
 
-  /* ---- Sticky header shadow ---- */
+  /* ---- Splash / preloader ---- */
+  var splash = document.getElementById("splash");
+  if (splash) {
+    var doc = document.documentElement;
+    var heroVideo = document.querySelector(".hero__video");
+    var started = Date.now();
+    var MIN_MS = 1000;   // don't flash the splash away too fast
+    var MAX_MS = 6000;   // never block the page if the video stalls
+    var dismissed = false;
+
+    doc.classList.add("splash-lock");
+
+    var dismiss = function () {
+      if (dismissed) return;
+      dismissed = true;
+      var wait = Math.max(0, MIN_MS - (Date.now() - started));
+      setTimeout(function () {
+        splash.classList.add("splash--done");
+        doc.classList.remove("splash-lock");
+        setTimeout(function () {
+          if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
+        }, 650);
+      }, wait);
+    };
+
+    if (heroVideo) {
+      // readyState >= 3 (HAVE_FUTURE_DATA) means it can play through smoothly
+      if (heroVideo.readyState >= 3) dismiss();
+      heroVideo.addEventListener("canplaythrough", dismiss);
+      heroVideo.addEventListener("canplay", dismiss);
+      heroVideo.addEventListener("loadeddata", dismiss);
+      heroVideo.addEventListener("error", dismiss);
+      try { heroVideo.load(); } catch (e) {}
+    }
+    window.addEventListener("load", dismiss);
+    setTimeout(dismiss, MAX_MS);
+  }
+
+  /* ---- Sticky / overlay header ---- */
   var header = document.querySelector(".site-header");
   if (header) {
+    var isOverlay = header.classList.contains("site-header--overlay");
     var onScroll = function () {
-      header.classList.toggle("scrolled", window.scrollY > 8);
+      // overlay nav stays transparent over the hero, then solidifies near its end
+      var trigger = isOverlay ? window.innerHeight * 0.6 : 8;
+      header.classList.toggle("scrolled", window.scrollY > trigger);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
     onScroll();
+  }
+
+  /* ---- Hero scroll cue: smooth-scroll without writing a #hash to the URL
+          (so a reload always starts at the top, keeping the nav transparent) ---- */
+  var scrollCue = document.querySelector(".hero__scroll");
+  if (scrollCue) {
+    scrollCue.addEventListener("click", function (e) {
+      var target = document.querySelector(scrollCue.getAttribute("href"));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
   }
 
   /* ---- Mobile nav ---- */
   var toggle = document.querySelector(".nav__toggle");
   var links = document.querySelector(".nav__links");
   if (toggle && links) {
-    toggle.addEventListener("click", function () {
-      var open = links.classList.toggle("open");
+    var setMenu = function (open) {
+      links.classList.toggle("open", open);
+      if (header) header.classList.toggle("menu-open", open);
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    toggle.addEventListener("click", function () {
+      setMenu(!links.classList.contains("open"));
     });
     links.querySelectorAll("a").forEach(function (a) {
-      a.addEventListener("click", function () { links.classList.remove("open"); });
+      a.addEventListener("click", function () { setMenu(false); });
     });
   }
 
